@@ -1,0 +1,157 @@
+Country Name,Year,Men,Women,Total_participants
+Canada,1992,189,125,314
+Canada,1996,153,154,307
+Canada,2000,154,155,309
+Canada,2004,132,133,265
+Canada,2008,188,146,334
+Canada,2012,122,157,279
+United States,1992,355,190,545
+United States,1996,375,271,646
+United States,2000,333,253,586
+United States,2004,279,254,533
+United States,2008,310,286,596
+United States,2012,262,268,530
+Australia,1992,187,92,279
+Australia,1996,250,167,417
+Australia,2000,341,276,617
+Australia,2004,268,202,470
+Australia,2008,260,173,433
+Australia,2012,224,186,410
+New Zealand,1992,92,42,134
+New Zealand,1996,65,32,97
+New Zealand,2000,91,60,151
+New Zealand,2004,81,67,148
+New Zealand,2008,97,85,182
+New Zealand,2012,97,87,184
+Brazil,1992,132,50,182
+Brazil,1996,159,66,225
+Brazil,2000,111,94,205
+Brazil,2004,124,119,243
+Brazil,2008,145,132,277
+Brazil,2012,136,122,258
+Argentina,1992,67,17,84
+Argentina,1996,131,47,178
+Argentina,2000,98,45,143
+Argentina,2004,106,46,152
+Argentina,2008,95,42,137
+Argentina,2012,96,41,137
+Colombia,1992,46,3,49
+Colombia,1996,39,9,48
+Colombia,2000,25,19,44
+Colombia,2004,32,21,53
+Colombia,2008,34,34,68
+Colombia,2012,48,56,104
+Venezuela,1992,22,4,26
+Venezuela,1996,34,5,39
+Venezuela,2000,36,14,50
+Venezuela,2004,33,15,48
+Venezuela,2008,73,35,108
+Venezuela,2012,43,29,72
+Chile,1992,9,3,12
+Chile,1996,16,5,21
+Chile,2000,43,7,50
+Chile,2004,16,6,22
+Chile,2008,17,9,26
+Chile,2012,21,14,35
+China,1992,117,127,244
+China,1996,111,183,294
+China,2000,91,180,271
+China,2004,136,248,384
+China,2008,192,477,669
+China,2012,171,225,396
+India,1992,45,8,53
+India,1996,41,8,49
+India,2000,43,22,65
+India,2004,48,28,76
+India,2008,42,15,57
+India,2012,60,23,83
+Japan,1992,175,81,256
+Japan,1996,157,149,306
+Japan,2000,156,110,266
+Japan,2004,139,167,306
+Japan,2008,167,165,332
+Japan,2012,138,157,295
+"Korea, South",1992,154,72,226
+"Korea, South",1996,189,111,300
+"Korea, South",2000,175,106,281
+"Korea, South",2004,145,119,264
+"Korea, South",2008,147,120,267
+"Korea, South",2012,135,113,248
+Vietnam,1992,2,5,7
+Vietnam,1996,3,3,6
+Vietnam,2000,3,4,7
+Vietnam,2004,6,5,11
+Vietnam,2008,7,6,13
+Vietnam,2012,6,12,18
+South Africa,1992,68,25,93
+South Africa,1996,64,20,84
+South Africa,2000,89,38,127
+South Africa,2004,66,40,106
+South Africa,2008,82,54,136
+South Africa,2012,67,58,125
+Ghana,1992,35,2,37
+Ghana,1996,28,7,35
+Ghana,2000,16,6,22
+Ghana,2004,18,10,28
+Ghana,2008,8,1,9
+Ghana,2012,6,3,9
+Kenya,1992,42,9,51
+Kenya,1996,40,12,52
+Kenya,2000,43,13,56
+Kenya,2004,22,24,46
+Kenya,2008,28,18,46
+Kenya,2012,27,20,47
+Zimbabwe,1992,10,9,19
+Zimbabwe,1996,12,1,13
+Zimbabwe,2000,11,5,16
+Zimbabwe,2004,8,4,12
+Zimbabwe,2008,9,4,13
+Zimbabwe,2012,4,3,7
+Bulgaria,1992,87,51,138
+Bulgaria,1996,74,36,110
+Bulgaria,2000,57,34,91
+Bulgaria,2004,49,46,95
+Bulgaria,2008,30,32,62
+Bulgaria,2012,36,27,63
+Germany,1992,300,163,463
+Germany,1996,278,187,465
+Germany,2000,241,181,422
+Germany,2004,250,191,441
+Germany,2008,249,190,439
+Germany,2012,218,174,392
+United Kingdom,1992,229,142,371
+United Kingdom,1996,184,116,300
+United Kingdom,2000,181,129,310
+United Kingdom,2004,161,103,264
+United Kingdom,2008,168,143,311
+United Kingdom,2012,279,262,541
+Poland,1992,149,52,201
+Poland,1996,126,39,165
+Poland,2000,129,58,187
+Poland,2004,132,62,194
+Poland,2008,200,68,268
+Poland,2012,130,88,218
+Sweden,1992,143,44,187
+Sweden,1996,111,66,177
+Sweden,2000,98,52,150
+Sweden,2004,62,53,115
+Sweden,2008,70,64,134
+Sweden,2012,55,79,134
+Mexico,1992,76,26,102
+Mexico,1996,68,29,97
+Mexico,2000,52,36,88
+Mexico,2004,59,50,109
+Mexico,2008,43,42,85
+Mexico,2012,64,38,102
+Cuba,1992,126,50,176
+Cuba,1996,111,53,164
+Cuba,2000,147,82,229
+Cuba,2004,97,54,151
+Cuba,2008,89,60,149
+Cuba,2012,66,45,111
+Jamaica,1992,22,14,36
+Jamaica,1996,27,19,46
+Jamaica,2000,22,26,48
+Jamaica,2004,22,25,47
+Jamaica,2008,24,24,50
+Jamaica,2012,25,25,50

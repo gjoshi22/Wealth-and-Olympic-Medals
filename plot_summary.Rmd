@@ -1,0 +1,81 @@
+---
+title: "Project Bar Graph and Summary Table"
+author: "Gunjan Joshi"
+date: "10/2/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/gunja/Desktop/Hw/Data 106/Group_Project")
+
+library(readr)
+library(dplyr)
+library(reshape2)
+library(tidyr)
+library(ggplot2)
+
+
+medals <- read_csv("No_of_medals_fixed.csv")
+
+participants <- read_csv("total_participants.csv")
+```
+
+```{r }
+
+asian_c = c("China", "India", "Japan", "Korea, South", "Vietnam")
+north_a = c("United States", "Canada", "Jamaica", "Mexico", "Cuba")
+south_a = c("Brazil", "Argentina", "Chile", "Colombia", "Venezuela")
+aus_nz = c("Australia", "New Zealand")
+eu = c("Germany", "Poland", "Sweden", "Bulgaria", "United Kingdom")
+afr= c("South Africa", "Ghana", "Zimbabwe", "Kenya")
+
+continents = medals %>% mutate(Continent = ifelse(`Country Name` %in% asian_c, "Asia", 
+                                     ifelse(`Country Name` %in% north_a, "North America",
+                                            ifelse(`Country Name` %in% south_a, "South America",
+                                                   ifelse(`Country Name` %in% aus_nz, "Australia & New Zealand",
+                                                          ifelse(`Country Name` %in% eu, "Europe",
+                                                                 "Africa"))))))
+
+```
+
+1. Create a relevant summary table. Make sure this table is not super long or wordy. Also
+make sure the columns are renamed appropriately.
+
+```{r message=FALSE}
+final = continents %>% mutate(number_medals = ifelse(is.na(number_medals), 0, number_medals)) 
+z = final %>%group_by(Year,`Country Name`, `GDP Per Capita`, HDI_Value, Population, Continent) %>% summarise(Total_Medals = sum(number_medals))
+y = merge(z, participants, by.x = c("Country Name", "Year"), by.y = c("Country Name", "Year"))
+ratio = y %>% mutate(`Ratio of women to men participants` = Women / Men , Total_Medals = as.numeric(Total_Medals))
+names(ratio)[4] <- "HDI Value"
+names(ratio)[7] <- "Total Medals"
+names(ratio)[10] <- "Total Participants"
+
+ratio
+```
+
+
+2. Create a relevant plot (either boxplot, barplot (live session) or scatterplot (pre-recorded)).
+Make sure to add color, nice titles (maybe captions and subtitles) and edit the plot a little
+(maybe change the colors, the transparency of the colors etc.)
+
+```{r message=FALSE}
+
+
+cont = final %>% group_by(Year, `Continent`) %>% summarise(Total_Medals = sum(number_medals))
+
+
+cont %>% mutate(Year= factor(Year)) %>% 
+  ggplot(aes(x =Year, y=Total_Medals, fill=Year, color= Year))+
+  geom_bar(stat = "identity", position = "dodge", alpha= 0.85)+
+  facet_wrap(~Continent)+ 
+  theme(axis.text.x=element_text(angle=45, hjust=1))+ 
+  ggtitle("Total Medals Won in the Olympics")+
+  xlab("Years (1992-2012)")+
+  ylab("Number of Medals Won")+
+  labs(subtitle = "Medals won by different Continents from 1992- 2012")
+```
+
+

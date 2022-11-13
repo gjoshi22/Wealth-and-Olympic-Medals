@@ -1,0 +1,108 @@
+---
+title: "Group Dataset"
+author: "Gunjan Joshi"
+date: "10/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/gunja/Desktop/Hw/Data 106/Group_Project")
+write.csv(final, "No_of_medals_fixed.csv")
+
+library(readr)
+library(dplyr)
+library(reshape2)
+library(tidyr)
+population <- read_csv("population.csv")
+hdi <- read_csv("Human Development Index (HDI).csv")
+gdppc <- read_csv("GDP PC FAO data.csv")
+summer <- read_csv("summer_test.csv")
+```
+
+```{r}
+target_country <- c("Argentina", "Brazil", "Chile", "Colombia", "Venezuela", "United States", "Canada", "Mexico", "Cuba", "Jamaica", "Germany", "United Kingdom", "Poland", "Sweden", "Bulgaria", "Australia", "New Zealand", "China", "Japan", "India", "Vietnam", "Korea, South", "South Africa", "Ghana", "Zimbabwe", "Kenya")
+
+years <- c("1992", "1996", "2000", "2004", "2008", "2012")
+
+```
+
+
+#wide to long for population
+```{r}
+long_population = population %>% melt(id <- c("Country Name", "Country Code"), value.name='Population', variable.name ='Year' )
+filtered_lp = long_population %>% filter(`Country Name` %in% target_country, Year %in% years)             
+```
+
+#selecting required columns for gdppc
+```{r}
+long_gdppc = gdppc %>% select(Area, Year, Value)
+colnames(long_gdppc) <- c("Country Name", "Year", "GDP Per Capita")
+
+filtered_gdppc = long_gdppc %>% filter(`Country Name` %in% target_country, Year %in% years)  
+```
+
+#wide to long for HDI
+```{r}
+long_HDI = hdi %>% melt(id <- c("HDI Rank", "Country"), value.name = 'HDI_Value', variable.name = 'Year')
+names(long_HDI)[2] <-"Country Name"
+filtered_HDI = long_HDI %>% filter(`Country Name` %in% target_country, Year %in% years)  
+```
+
+
+```{r}
+merged_1 = merge(filtered_gdppc, filtered_HDI, by=c("Country Name", "Year"))
+merged_2 = merge(merged_1, filtered_lp, by=c("Country Name", "Year"))
+```
+
+#filtering countries and year for summer dataset
+```{r}
+target_country_2 <- c("ARG", "BRA", "CHI", "COL", "VEN", "USA", "CAN", "MEX", "CUB", "JAM", "GER", "GBR", "POL", "SWE", "BUL", "AUS", "NZL", "CHN", "JPN", "IND", "VIE", "KOR", "RSA", "GHA", "ZIM", "KEN")
+
+summer_filtered_summarised = summer %>% filter(`Country Name` %in% target_country_2, Year %in% years)
+
+x = summer_filtered_summarised %>% group_by(Year, `Country Name`, Event, Medal) %>% slice(1)
+
+```
+```{r message=FALSE}
+#no of medals won
+table1 = summer_filtered_summarised %>% group_by(`Country Name`, Year, Event, Medal)%>% slice(1) %>% summarise(number_medals = n())
+```
+
+```{r}
+#no of men
+table_men = summer_filtered_summarised %>% group_by(`Country Name`, Year, Gender) %>% summarise(No_MEN = n()) %>% filter(`Gender` == "Men")
+table_men %>% select("No_MEN")
+```
+
+```{r message=FALSE}
+#no of women
+table_women = summer_filtered_summarised %>% group_by(`Country Name`, Year, Gender) %>% summarise(No_WOMEN = n()) %>% filter(`Gender` == "Women")
+
+```
+
+
+```{r}
+
+final = merge(merged_2, table1, by.x =c("Country Code", "Year"), by.y = c("Country Name", "Year"), all.x = TRUE, all.y = TRUE)
+
+```
+
+#this is where the problem occurs
+```{r warning=FALSE}
+men_women = merge(table_men, table_women, by.x = c("Country Name", "Year"), by.y = c("Country Name", "Year"), all.x =TRUE, all.y = TRUE)
+
+
+final_2 = merge(final, men_women, by.x =c("Country Code", "Year"), by.y = c("Country Name", "Year"), all.x =TRUE, all.y = TRUE)
+
+
+#ratio
+ratio = final_2 %>% mutate(Ratio_women_to_men = No_WOMEN / No_MEN, 
+                           HDI_Value = as.numeric(HDI_Value))
+
+
+
+
+```
+
+

@@ -1,0 +1,198 @@
+---
+title: "Project Bar Graph and Summary Table"
+author: "Gunjan Joshi"
+date: "10/2/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/gunja/Desktop/Hw/Data 106/Group_Project")
+
+library(readr)
+library(dplyr)
+library(reshape2)
+library(tidyr)
+library(ggplot2)
+
+
+medals <- read_csv("No_of_medals_fixed.csv")
+
+participants <- read_csv("total_participants.csv")
+#write.csv(Australia, "Australia.csv")
+```
+
+```{r }
+
+asian_c = c("China", "India", "Japan", "Korea, South", "Vietnam")
+north_a = c("United States", "Canada", "Jamaica", "Mexico", "Cuba")
+south_a = c("Brazil", "Argentina", "Chile", "Colombia", "Venezuela")
+aus_nz = c("Australia", "New Zealand")
+eu = c("Germany", "Poland", "Sweden", "Bulgaria", "United Kingdom")
+afr= c("South Africa", "Ghana", "Zimbabwe", "Kenya")
+
+continents = medals %>%
+  mutate(Continent = ifelse(`Country Name` %in% 
+                              asian_c, "Asia", 
+                                     ifelse(`Country Name` %in%
+                                              north_a, "N.America",
+                                            ifelse(`Country Name` %in% 
+                                                     south_a, "S.America",
+                                                   ifelse(`Country Name` %in% 
+                                                            aus_nz, "Australia(&NZ)",
+                                                          ifelse(`Country Name` %in% 
+                                                                   eu, "Europe",
+                                                                 "Africa"))))))
+a = participants %>% 
+  mutate(Continent = ifelse(`Country Name` %in% 
+                              asian_c, "Asia", 
+                                     ifelse(`Country Name` %in%
+                                              north_a, "N.America",
+                                            ifelse(`Country Name` %in% 
+                                                     south_a, "S.America",
+                                                   ifelse(`Country Name` %in% 
+                                                            aus_nz, "Australia(&NZ)",
+                                                          ifelse(`Country Name` %in% 
+                                                                   eu, "Europe",
+                                                                 "Africa"))))))
+```
+
+1. Create a relevant summary table. Make sure this table is not super long or wordy. Also
+make sure the columns are renamed appropriately.
+
+```{r message=FALSE}
+final = continents %>% 
+  mutate(number_medals = ifelse(is.na(number_medals), 0, number_medals)) 
+z = final %>%group_by(Year, Continent) %>% 
+  summarise(Total_Medals = sum(number_medals))
+q = a %>%group_by(Year, Continent) %>% 
+  summarise(Male_p = sum(Men), Female_p = sum(Women), All_Participant = sum(Total_participants))
+ratio = q %>% mutate(`Women to Men participants` = Female_p / Male_p)
+
+
+last = merge(z, ratio, by.x = c("Continent", "Year"), by.y = c("Continent", "Year"))
+
+names(last)[4] <- "Men"
+names(last)[5] <- "Women"
+names(last)[3] <- "Total Medals"
+names(last)[6] <- "Total Participants"
+last
+
+```
+
+
+
+2. Create a relevant plot (either boxplot, barplot (live session) or scatterplot (pre-recorded)).
+Make sure to add color, nice titles (maybe captions and subtitles) and edit the plot a little
+(maybe change the colors, the transparency of the colors etc.)
+
+```{r message=FALSE}
+
+
+cont = final %>% group_by(Year, `Continent`) %>% summarise(Total_Medals = sum(number_medals))
+
+
+cont %>% mutate(Year= factor(Year)) %>% 
+  ggplot(aes(x =Year, y=Total_Medals, fill=Year, color= Year))+
+  geom_bar(stat = "identity", position = "dodge", alpha= 0.85, color = "black")+
+  facet_wrap(~Continent)+ 
+  theme(axis.text.x=element_text(angle=45, hjust=1))+ 
+  ggtitle("Total Medals Won in the Olympics")+
+  xlab("Years (1992-2012)")+
+  ylab("Number of Medals Won")+
+  labs(subtitle = "Medals won by different Continents from 1992- 2012")
+```
+**DATASET FOR MODELS**
+
+```{r message=FALSE}
+
+gold = final %>% filter(Medal == "Gold")
+gold2 = gold %>% group_by(Year, `Country Name`) %>% #, `GDP Per Capita`, HDI_Value, Population) 
+                         summarise(`Total Gold Medals` = sum(number_medals))
+
+
+p = final %>% group_by(`Country Name`, Year) %>% slice(1) %>% 
+  select(Year, `Country Name`, `GDP Per Capita`, HDI_Value, Population)
+
+
+r = a %>%group_by(Year, `Country Name`) %>% 
+  summarise(Male_p = sum(Men), Female_p = sum(Women), All_Participant = sum(Total_participants))%>%
+  mutate(`Women to Men participants` = Female_p / Male_p)
+
+dataset = merge(p, r, by=c("Year", "Country Name"), all = TRUE)
+
+dataset2 = merge(dataset, gold2, by=c("Year", "Country Name"),all = TRUE)
+
+f = final %>%group_by(Year, `Country Name`) %>% 
+  summarise(Total_Medals = sum(number_medals))
+project = merge(dataset2, f, by=c("Year", "Country Name"),all = TRUE)
+
+model_dataset = project %>% mutate(`Total Gold Medals` = ifelse(is.na(`Total Gold Medals`), 0, `Total Gold Medals`))
+
+```
+
+
+```{r}
+Africa = last %>% filter(Continent == "Africa")
+```
+
+
+```{r}
+N.America = last %>% filter(Continent == "N.America")
+```
+
+```{r}
+Europe = last %>% filter(Continent == "Europe") 
+S.America = last %>% filter(Continent == "S.America")
+Asia = last %>% filter(Continent == "Asia")
+Australia = last %>% filter(Continent == "Australia(&NZ)")
+```
+
+```{r}
+model_dataset
+```
+
+
+```{r}
+scatter_data = model_dataset %>% mutate(Continent = ifelse(`Country Name` %in% 
+                              asian_c, "Asia", 
+                                     ifelse(`Country Name` %in%
+                                              north_a, "N.America",
+                                            ifelse(`Country Name` %in% 
+                                                     south_a, "S.America",
+                                                   ifelse(`Country Name` %in% 
+                                                            aus_nz, "Australia(&NZ)",
+                                                          ifelse(`Country Name` %in% 
+                                                                   eu, "Europe",
+                                                                 "Africa"))))))
+```
+
+
+```{r}
+
+bar = scatter_data %>% group_by(Year, `Continent`) %>% summarise(`Total Gold Medals` = sum(`Total Gold Medals`))
+
+
+
+
+bar %>% mutate(Year= factor(Year)) %>% 
+  ggplot(aes(x =Year, y= `Total Gold Medals`, fill= Continent))+
+  geom_bar(stat = "identity", position = "dodge", alpha= 0.85,  color= "black")+
+  ggtitle("Total Gold Medals Won in the Olympics")+
+  xlab("Years (1992-2012)")+
+  ylab(" Total Number of Gold Medals Won")+
+  labs(subtitle = " Gold Medals won by different Continents from 1992- 2012")
+```
+```{r}
+gdp_plot = scatter_data %>% group_by(Year, `Continent`) %>% summarise(`Average GDPPC` = mean(`GDP Per Capita`))
+gdp_plot %>% mutate(Year= factor(Year)) %>% 
+  ggplot(aes(x =Year, y= `Average GDPPC`, fill= Continent))+
+  geom_bar(stat = "identity", position = "dodge", alpha= 0.85, color= "black")+
+  ggtitle("Average GDPPC for different Continents")+
+  xlab("Years (1992-2012)")+
+  ylab(" Average GDPPC")+
+  labs(subtitle = " Average GDP from 1992 - 2012")
+```
+

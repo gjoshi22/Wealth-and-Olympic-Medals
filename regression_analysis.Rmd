@@ -1,0 +1,100 @@
+---
+title: "regression"
+author: "Gunjan Joshi"
+date: "11/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/gunja/Desktop/Hw/Data 106/Group_Project/")
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(caret)
+data <- read.csv("Model Dataset.csv")
+options(scipen = 999)
+```
+
+
+```{r}
+mod1 = data %>% select(Country.Name, GDP.Per.Capita, HDI_Value, Population, Total_Medals)
+mod2 = data %>% select(Country.Name, GDP.Per.Capita, Women.to.Men.participants, Total.Gold.Medals)
+```
+
+Model 1: 
+GDP, HDI, Population can predict total  medals
+
+```{r message=FALSE}
+data %>% ggplot(aes(x = GDP.Per.Capita, y = Total_Medals))+
+  geom_point()+geom_smooth(method = lm, se=FALSE)+
+  ggtitle("Scatterplot Showing GDP Per Capita vs Total Medals Won")+
+  xlab("GDP Per Capita")+ylab("Total Medals Won")
+data %>% ggplot(aes(x = Population, y = Total_Medals))+
+  geom_point()+geom_smooth(method = lm, se=FALSE)+
+  ggtitle("Scatterplot Showing Population vs Total Medals Won")+
+  xlab("Population")+ylab("Total Medals Won")
+data %>% ggplot(aes(x = HDI_Value, y = Total_Medals))+
+  geom_point()+geom_smooth(method = lm, se=FALSE)+
+  ggtitle("Scatterplot Showing HDI Value vs Total Medals Won")+
+  xlab("HDI Value")+ylab("Total Medals Won")
+```
+```{r}
+model_1 = lm(Total_Medals ~  GDP.Per.Capita + Population + HDI_Value, 
+             data = mod1)
+summary(model_1)
+```
+
+```{r}
+data_ctrl1 = trainControl(method = "LOOCV")
+regression = train(Total_Medals ~ GDP.Per.Capita +  Population + HDI_Value , 
+      data = mod1,
+      trControl = data_ctrl1,
+      method = "leapBackward", #backwards selection - best model GDP, Population
+      na.action = na.pass)
+```
+
+```{r}
+summary(regression$finalModel)
+```
+
+```{r}
+data_ctrl3 = trainControl(method = "LOOCV")
+train(Total_Medals ~ GDP.Per.Capita +  Population, 
+      data = mod1,
+      trControl = data_ctrl3,
+      method = "lm",
+      na.action = na.pass)
+```
+
+
+Model 2: 
+GDP, Women to men ration in participation can predict total  gold medals
+
+```{r message=FALSE}
+data %>% ggplot(aes(x = GDP.Per.Capita, y = Total.Gold.Medals))+
+  geom_point()+geom_smooth(method = lm, se=FALSE)+
+  ggtitle("Scatterplot Showing GDP Per Capita vs Total Gold Medals Won")+
+  xlab("GDP Per Capita")+ylab("Total Gold Medals Won")
+data %>% ggplot(aes(x = Women.to.Men.participants, y = Total.Gold.Medals))+
+  geom_point()+geom_smooth(method = lm, se=FALSE)+
+  ggtitle("Scatterplot Showing Ratio of Women to Men in Participation vs Total Gold Medals Won")+
+  xlab("Ratio of Women to Men in Participation")+ylab("Total Gold Medals Won")
+```
+
+```{r}
+
+model_2 = lm(Total.Gold.Medals ~ GDP.Per.Capita + Women.to.Men.participants, 
+             data = mod2)
+summary(model_2)
+```
+```{r}
+data_ctrl2 = trainControl(method = "LOOCV")
+train(Total.Gold.Medals ~ GDP.Per.Capita + Women.to.Men.participants, 
+      data = mod2,
+      trControl = data_ctrl2,
+      method = "lm",
+      na.action = na.pass)
+```
+
+
